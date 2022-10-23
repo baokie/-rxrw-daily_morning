@@ -43,11 +43,49 @@ def get_words():
 def get_random_color():
   return "#%06x" % random.randint(0, 0xFFFFFF)
 
+def get_xiao():
+  url2 = "https://www.mxnzp.com/api/jokes/list/random?app_id=unrbtuo7rkkiq9ic&app_secret=SWNoR2Q4MXRUWnIvNk5zYWdkVDlidz09"
+  res2 = requests.get(url2).json()
+  xiao = res2['data']
+  return xiao
+
 
 client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
 wea, temperature = get_weather()
-data = {"weather":{"value":wea},"temperature":{"value":temperature},"love_days":{"value":get_count()},"birthday_left":{"value":get_birthday()},"words":{"value":get_words(), "color":get_random_color()}}
+xiao = get_xiao()
+data = {
+  "weather":{
+    "value":wea
+  },
+  "temperature":{
+    "value":temperature
+  },
+  "love_days":{
+    "value":get_count()
+  },
+  "birthday_left":{
+    "value":get_birthday()
+  },
+  "words":{
+    "value":get_words(), 
+    "color":get_random_color()
+  },
+  
+  "xiao":{
+    "value":xiao[0]['content'], 
+    "color":get_random_color()
+  },
+  "xiao2":{
+    "value":xiao[1]['content'], 
+    "color":get_random_color()
+  },
+  "xiao3":{
+    "value":xiao[2]['content'], 
+    "color":get_random_color()
+  },
+  
+}
 res = wm.send_template(user_id, template_id, data)
 print(res)
